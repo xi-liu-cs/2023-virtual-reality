@@ -30,4 +30,3 @@ export const init = async model => {
                   .color(0,0,.5 + .5 * Math.sin(3 * model.time));
    });
 }
-
