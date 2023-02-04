@@ -8,8 +8,11 @@ export default () => {
 
    return {
       enableSceneReloading: true,
-      scenes: [
-         { name: "xi_liu", path: "./xi_liu.js" }
+      scenes: [ 
+         { name: "DemoExample" , path: "./demoExample.js" },
+         { name: "DemoKP0"     , path: "./demoKP0.js"     },
+         { name: "DemoKP1"     , path: "./demoKP1.js"     },
+         { name: "DemoKP2"     , path: "./demoKP2.js"     },
       ]
    };
 }
