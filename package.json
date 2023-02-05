@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/snowymo/immersive-presentation#readme",
   "devDependencies": {
-    "gltf-import-export": "^1.0.16",
+    "gltf-import-export": "^1.0.22",
     "prettier": "2.2.1"
   }
 }
