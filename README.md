@@ -2,6 +2,15 @@
 
 Software for 2023 VR class
 
+## controller
+
+https://www.youtube.com/watch?v=upoaPCjPVSA
+
+## robot
+
+https://www.youtube.com/watch?v=TKYXTV5vuHs
+
+
 # How to setup environment
 
 install Node.js and npm if you haven't
