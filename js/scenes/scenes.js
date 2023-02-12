@@ -3,18 +3,21 @@ import { Gltf2Node } from "../render/nodes/gltf2.js";
 
 export default () => {
    global.scene().addNode(new Gltf2Node({
-      url: "../media/gltf/cave/cave.gltf"
+      url: ""
    })).name = "backGround";
-
-   global.scene().addNode(new Gltf2Node({
-      url: "../media/gltf/0/human.glb"
-   })).name = "human";
 
    return {
       enableSceneReloading: true,
       scenes: [ 
-         {name: "xi_liu" , path: "./1.js"},
-         {name: "0", path: "./0.js"}
+         { name: "DemoExample"       , path: "./demoExample.js"       },
+         { name: "DemoKP0"           , path: "./demoKP0.js"           },
+         { name: "DemoKP1"           , path: "./demoKP1.js"           },
+         { name: "DemoKP2"           , path: "./demoKP2.js"           },
+         { name: "DemoKP3"           , path: "./demoKP3.js"           },
+         { name: "DemoCanvas"        , path: "./demoCanvas.js"        },
+         { name: "DemoTwoCubes"      , path: "./demoTwoCubes.js"      },
+         { name: "DemoTrianglesMesh" , path: "./demoTrianglesMesh.js" },
+         { name: "DemoOpacity"       , path: "./demoOpacity.js"       },
       ]
    };
 }
