@@ -2,31 +2,21 @@ import * as cg from "../render/core/cg.js";
 import { controllerMatrix, buttonState, joyStickState } from "../render/core/controllerInput.js";
 
 /*********************************************************************************
-
 This demo shows how you can do basic object manipulation with your controllers.
-
-
 (1) Moving an object
-
     When you place your left controller inside the box, the box turns pink.
-
     Then when you squeeze the left trigger,
     the box turns red and moves together with your controller.
-
-
 (2) Moving and rotating an object
-
     When you place your right controller inside the box, the box turns light blue.
-
     Then when you squeeze the right trigger,
     the box turns blue and both moves and rotates together with your controller.
-
 *********************************************************************************/
 
 let leftTriggerPrev = false;
 let rightTriggerPrev = false;
 
-let MP = cg.mTranslate(0,1,.5);
+let MP = cg.mTranslate(0,1.5,.5);
 let A = [0,0,0];
 let MA = cg.mIdentity();
 
@@ -128,4 +118,3 @@ export const init = async model => {
       box.setMatrix(MP).scale(.1);
    });
 }
-
