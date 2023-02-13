@@ -54,10 +54,13 @@ export const init = async model =>
         g2.setColor('white');
         g2.textHeight(.05);
         g2.fillText('particle', .2, .45, 'center');
+        g2.fillRect(0, 0, .1, .1);
         g2.drawWidgets(a);
     });
     a.value = [.5, .5];
-    g2.addWidget(a, 'button', .03, .04, 'white', 'number of particles', () => { });
+    // g2.addWidget(a, 'button', .03, .04, '#ff9999', 'number of particles', () => { });
+    // g2.addWidget(a, 'trackpad', .1, .01, '#ff8080', 'my widget', value => a.value = value);
+    // g2.addWidget(a, 'textbox' , .1, .01, '#ffffff', 'hello', value => {});
 
    model.animate(() =>
    {
