@@ -368,6 +368,8 @@ function G2() {
          clockHand(.010,           second / 60      , .42);
       context.restore();
    }
+
+   this.setTextColor = function(color){ context.fillStyle = color; }
 }
 
 export let g2 = new G2();

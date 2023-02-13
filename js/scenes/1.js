@@ -1,171 +1,84 @@
-import * as cg from "../render/core/cg.js";
 import { controllerMatrix, buttonState, joyStickState } from "../render/core/controllerInput.js";
 
-let leftTriggerPrev = false;
-let rightTriggerPrev = false;
-let right1pre = false;
-let right3pre = false;
+export const init = async model => 
+{
+   let c = [.8,.5,.3],
+   a1 = model.add('tubeY').color(c),
+   a2 = model.add('tubeY').color(c),
+   a2_2 = model.add('sphere').color(c),
+   a2_3 = model.add('sphere').color(c),
+   a3 = model.add('sphere').color(c),
+   a3_2 = model.add('sphere').color(c),
+   a3_3 = a3.add('sphere').color(c),
+   a3_4 = a3_2.add('sphere').color(c),
+   a3_5 = a3_3.add('cube').color(c),
+   a3_6 = a3_4.add('cube').color(c),
+   a4 = a2.add('sphere').color(c),
+   a4_2 = a2.add('sphere').color(c),
+   a4_low = a4.add('sphere').color(c),
+   a4_low_2 = a4_2.add('sphere').color(c),
+   left_hand = a4_low.add('sphere').color(c),
+   right_hand = a4_low_2.add('sphere').color(c),
+   a = model.add(),
+   head = a.add('sphere').color(c),
+   leye = head.add('sphere'),
+   reye = head.add('sphere'),
+   leye_center = leye.add('sphere'),
+   reye_center = reye.add('sphere'),
+   nose = head.add('sphere'),
+   mouth = head.add('sphere');
 
-let MP = cg.mTranslate(0,1,.5);
-let MP2 = cg.mTranslate(0,-1,.5);
-let A = [0,0,0];
-let MA = cg.mIdentity();
-let MA1 = cg.mIdentity();
-let MA2 = cg.mIdentity();
-let tex = '../media/textures/planet.jpg';
+   model.move(0,1.5,0).scale(.3).animate(() => 
+   {
+      function clamp(min, max, x){ return Math.min(Math.max(x, min), max); }
+      let c = [clamp(.5, 1, Math.cos(model.time)), clamp(.4, 1, Math.sin(model.time)), clamp(.3, 1, Math.cos(model.time))],
+      tex = '../media/textures/blue.jpg';
+      model.turnY(.1 * Math.cos(2.1*model.time));
 
-export const init = async model => {
+      /* neck */
+      a1.identity().move(0, .5, 0).scale(.2).color(c).texture(tex);
 
-   // CREATE THE BOX.
+      /* body */
+      a2.identity().move(0, 0, 0).scale(.2, .6, .2).color(c).texture(tex);
+      a2_2.identity().move(0, -.2, 0).scale(.35, .6, .3).color(c).texture(tex);
+      a2_3.identity().move(0, .2, 0).scale(.35, .6, .3).color(c).texture(tex);
 
-   let box = model.add('tubeY').texture(tex);
-   let obj;
+      /* upper leg */
+      a3.identity().move(-.2, -1, 0).turnX(.25 * Math.sin(2 * model.time)).scale(.13, .7, .13).color(c).texture(tex);
+      a3_2.identity().move(.2, -1, 0).turnX(-.25 * Math.sin(2 * model.time)).scale(.13, .7, .13).color(c).texture(tex);
 
-   // FUNCTION TO RETURN TRUE IF A POINT IS INSIDE THE BOX, OTHERWISE FALSE.
+      /* lower leg */
+      a3_3.identity().move(0, -1.5, 0).scale(.7, .7, .7).color(c).texture(tex);
+      a3_4.identity().move(0, -1.5, 0).scale(.7, .7, .7).color(c).texture(tex);
 
-   let isInBox = p => {
+      /* feet */
+      a3_5.identity().move(-.2, -1, 1).scale(.9, .06, 2).color(c).texture(tex);
+      a3_6.identity().move(.2, -1, 1).scale(.9, .06, 2).color(c).texture(tex);
 
-      // FIRST TRANSFORM THE POINT BY THE INVERSE OF THE BOX'S MATRIX.
+      /* upper arm */
+      a4.identity().move(-2, .17, 0).turnY(-Math.PI / 2.5).turnX(Math.PI / 2.5).turnY(.5 * Math.sin(2 * model.time)).scale(.4, .4, .7).color(c).texture(tex);
+      a4_2.identity().move(2, .17, 0).turnY(Math.PI / 2.5).turnX(Math.PI / 2.5).turnY(.5 * Math.sin(2 * model.time)).scale(.4, .4, .7).color(c).texture(tex);
 
-      let q = cg.mTransform(cg.mInverse(box.getMatrix()), p);
+      /* lower arm */
+      a4_low.identity().move(0, .17, 1.5).turnX(Math.PI / 3).color(c).texture(tex);
+      a4_low_2.identity().move(0, .17, 1.5).turnX(Math.PI / 3).color(c).texture(tex);
 
-      // THEN WE JUST NEED TO SEE IF THE RESULT IS INSIDE A UNIT CUBE.
+      /* hand */
+      left_hand.identity().move(0, .4, .5).turnZ(Math.PI / 4).scale(.4, .6, .9).color(c).texture(tex);
+      right_hand.identity().move(0, .4, .5).turnZ(Math.PI / 4).scale(.4, .6, .9).color(c).texture(tex);
 
-      /* return q[0] >= -1 & q[0] <= 1 &&
-             q[1] >= -1 & q[1] <= 1 &&
-             q[2] >= -1 & q[2] <= 1 ; */
+      head.identity().move(0,1,0)
+                    .scale(.95, 1.1, .95)
+                    .turnY(clamp(-.5, .5, Math.cos(model.time)))
+                    .scale(.3)
+                    .color(c)
+                    .texture(tex);
       
-      return q[0] >= -2 & q[0] <= 2 &&
-      q[1] >= -2 & q[1] <= 2 &&
-      q[2] >= -2 & q[2] <= 2 ;
-   }
-
-   let pre_time = model.time;
-   model.animate(() => {
-
-      // FETCH THE MATRIXES FOR THE LEFT AND RIGHT CONTROLLER.
-
-      let ml = controllerMatrix.left;
-      let mr = controllerMatrix.right;
-
-      // EXTRACT THE LOCATION OF EACH CONTROLLER FROM ITS MATRIX,
-      // AND USE IT TO SEE WHETHER THAT CONTROLLER IS INSIDE THE BOX.
-
-      let isLeftInBox  = isInBox(ml.slice(12,15));
-      let isRightInBox = isInBox(mr.slice(12,15));
-
-      // IF NEITHER CONTROLLER IS INSIDE THE BOX, COLOR THE BOX WHITE.
-
-      if (! isLeftInBox && ! isRightInBox)
-         box.color(1,1,1);
-
-      // IF THE LEFT CONTROLLER IS INSIDE THE BOX
-
-      if (isLeftInBox) {
-
-         // COLOR THE BOX PINK.
-
-         box.color(1,.5,.5);
-
-         // IF THE LEFT TRIGGER IS SQUEEZED
-
-         let leftTrigger = buttonState.left[0].pressed;
-	 if (leftTrigger) {
-
-            // COLOR THE BOX RED AND MOVE THE BOX.
-
-            box.color(1,0,0);
-            let B = ml.slice(12,15);
-            if (! leftTriggerPrev)         // ON LEFT DOWN EVENT:
-               A = B;                      // INITIALIZE PREVIOUS LOCATION.
-            else
-               MP = cg.mMultiply(cg.mTranslate(cg.subtract(B, A)), MP);
-
-	    A = B;                         // REMEMBER PREVIOUS LOCATION.
-         }
-         leftTriggerPrev = leftTrigger;
-      }
-
-      // IF THE RIGHT CONTROLLER IS INSIDE THE BOX
-
-      if (isRightInBox) {
-
-         // COLOR THE BOX LIGHT BLUE.
-
-         box.color(.5,.5,1);
-
-	 // IF THE RIGHT TRIGGGER IS SQUEEZED
-
-         let rightTrigger = buttonState.right[0].pressed;
-         /* let right1 = buttonState.right[1].pressed,
-         right2 = buttonState.right[2].pressed,
-         right3 = buttonState.right[3].pressed,
-         right4 = buttonState.right[4].pressed,
-         right5 = buttonState.right[5].pressed,
-         right6 = buttonState.right[6].pressed;
-         if(right1) box.color(1,0,0); // lower left elliptical button
-         if(right2) box.color(0,1,0);
-         if(right3) box.color(0,0,0); // thumbstick
-         if(right4) box.color(1,1,0); // a
-         if(right5) box.color(0,1,1); // b
-         if(right6) box.color(1,0,1); */
-	 if (rightTrigger) {
-
-	    // COLOR THE BOX BLUE AND MOVE AND ROTATE THE BOX.
-
-            box.color(0,0,1);
-            let MB = mr.slice();
-            if (! rightTriggerPrev)        // ON RIGHT DOWN EVENT:
-               MA = MB;                    // INITIALIZE PREVIOUS MATRIX.
-            else
-	       MP = cg.mMultiply(cg.mMultiply(MB, cg.mInverse(MA)), MP);
-
-	    MA = MB;                       // REMEMBER PREVIOUS MATRIX.
-         }
-         rightTriggerPrev = rightTrigger;
-   if(buttonState.right[1].pressed)
-   {
-      box.color(1, 0, 0);
-      model.add('donut').texture(tex);
-      obj = model.add('cube').texture(tex);
-      let MB1 = mr.slice();
-      if (!right1pre)                // ON RIGHT DOWN EVENT:
-      {
-         box.add('tubeX').texture(tex);
-         MA1 = MB1;                  // INITIALIZE PREVIOUS MATRIX.
-      }                    
-      else
-         MP2 = cg.mMultiply(cg.mMultiply(MB1, cg.mInverse(MA1)), MP2);
-      MA1 = MB1;      
-   }
-   if(buttonState.right[3].pressed) // thumbstick
-   {
-      box.color(0, 0, 0);
-      let MB2 = mr.slice();
-      if (!right3pre)                // ON RIGHT DOWN EVENT:
-      {
-         box.add('tubeZ').texture(tex);
-         MA2 = MB2;                  // INITIALIZE PREVIOUS MATRIX.
-      }                    
-      else
-         MP = cg.mMultiply(cg.mMultiply(MB2, cg.mInverse(MA2)), MP);
-      MA2 = MB2;        
-   }
-   right3pre = buttonState.right[3].pressed;
-   if(buttonState.right[4].pressed) // a
-   {
-      box.color(1, 1, 0);
-      MP = cg.mMultiply(MP, cg.mScale(1.1, 1.1, 1.1));
-   }
-   if(buttonState.right[5].pressed) // b
-   {
-      box.color(0, 1, 1);
-      MP = cg.mMultiply(MP, cg.mScale(.9, .9, .9));
-   }
-      }
-
-      // DISPLAY THE BOX.
-      box.setMatrix(MP).scale(.2); 
-      obj.setMatrix(MP2).scale(.2);
+      leye.identity().move(-.4, .3, .9).scale(.2, .1, .1).color(1, 1, 1);
+      reye.identity().move(.4, .3, .9).scale(.2, .1, .1).color(1, 1, 1);
+      leye_center.identity().scale(.7, 1.1, 1.1).color(0, 0, 0);
+      reye_center.identity().scale(.7, 1.1, 1.1).color(0, 0, 0);
+      nose.identity().move(0, 0, .1).scale(.4, .6, .97).color(.5, .1, .1);
+      mouth.identity().move(0, -.4, .1).scale(.6, .23, .93).color(.5, .1, .1);
    });
 }
