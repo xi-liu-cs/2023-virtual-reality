@@ -2189,13 +2189,19 @@ let frameCount = 0;
             let inch = 0.0254, foot = 12*inch, h = 10 * foot, w = 30 * foot, t = 2 * inch;
             let M = (x,y,z, sx,sy,sz) => cg.mMultiply(cg.mTranslate(x,y,z), cg.mScale(sx,sy,sz));
 	    this.defineMesh('roomBackground', this.combineMeshes([
-	       ['cube', M(   0,  0,   0, w/2,t/2,w/2), [.8,1,.8]],
+	       /* ['cube', M(   0,  0,   0, w/2,t/2,w/2), [.8,1,.8]],
+	       ['cube', M(   0,  h,   0, w/2,t/2,w/2), [.8,1,.8]],
+	       ['cube', M( w/2,h/2,   0, t/2,h/2,w/2), [1,.8,.8]],
+	       ['cube', M(-w/2,h/2,   0, t/2,h/2,w/2), [1,.8,.8]],
+	       ['cube', M(   0,h/2, w/2, w/2,h/2,t/2), [.8,.8,1]],
+	       ['cube', M(   0,h/2,-w/2, w/2,h/2,t/2), [.8,.8,1]], */
+          ['cube', M(   0,  0,   0, w/2,t/2,w/2), [.8,1,.8]],
 	       ['cube', M(   0,  h,   0, w/2,t/2,w/2), [.8,1,.8]],
 	       ['cube', M( w/2,h/2,   0, t/2,h/2,w/2), [1,.8,.8]],
 	       ['cube', M(-w/2,h/2,   0, t/2,h/2,w/2), [1,.8,.8]],
 	       ['cube', M(   0,h/2, w/2, w/2,h/2,t/2), [.8,.8,1]],
 	       ['cube', M(   0,h/2,-w/2, w/2,h/2,t/2), [.8,.8,1]],
-	    ]));
+	    ])); /* mesh,color,move,turn,size,texture,dull,flags,customShader,opacity */
          }
 	 draw(formMesh.roomBackground, 'white');
       }

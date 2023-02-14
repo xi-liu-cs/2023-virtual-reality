@@ -2,6 +2,10 @@
 
 Software for 2023 VR class
 
+## beam
+
+https://www.youtube.com/watch?v=M6hIwA_HXto
+
 ## controller
 
 https://www.youtube.com/watch?v=upoaPCjPVSA
@@ -9,7 +13,6 @@ https://www.youtube.com/watch?v=upoaPCjPVSA
 ## robot
 
 https://www.youtube.com/watch?v=TKYXTV5vuHs
-
 
 # How to setup environment
 

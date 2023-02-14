@@ -458,7 +458,11 @@ vec3 lighting_contribution(
 
     specular *= 1. - .99 * uDull;
 
+    float n = 0.;
+    for(int i = 0; i < 3; ++i)
+      n += noise(vPos + vec3(i, i, i));
     vec3 color = ambient + t.r * (.5 + dot(diffuse, diffuse));
+    color += vec3(1.0 - sin(uTime * n), 1.0 - cos(uTime * n), sin(uTime * 1.3 * n));
 
     // apply lighting
 //#define OLD
