@@ -1076,7 +1076,6 @@ this.defineMaterial = (id, ambient, diffuse, specular) =>
 
 // BUILD THE PALETTE OF COLORS
 
-   
    for (let n = 0 ; n < 10 ; n++) {
       let r = colors[n][0], g = colors[n][1], b = colors[n][2];   
       for (let l = 0 ; l < 2 ; l++) {
@@ -2189,14 +2188,8 @@ let fl = 5;                                                          // CAMERA F
             let inch = 0.0254, foot = 12*inch, h = 10 * foot, w = 30 * foot, t = 2 * inch;
             let M = (x,y,z, sx,sy,sz) => cg.mMultiply(cg.mTranslate(x,y,z), cg.mScale(sx,sy,sz));
 	    this.defineMesh('roomBackground', this.combineMeshes([
-	       /* ['cube', M(   0,  0,   0, w/2,t/2,w/2), [.8,1,.8]],
-	       ['cube', M(   0,  h,   0, w/2,t/2,w/2), [.8,1,.8]],
-	       ['cube', M( w/2,h/2,   0, t/2,h/2,w/2), [1,.8,.8]],
-	       ['cube', M(-w/2,h/2,   0, t/2,h/2,w/2), [1,.8,.8]],
-	       ['cube', M(   0,h/2, w/2, w/2,h/2,t/2), [.8,.8,1]],
-	       ['cube', M(   0,h/2,-w/2, w/2,h/2,t/2), [.8,.8,1]], */
-          ['cube', M(   0,  0,   0, w/2,t/2,w/2), [.8,1,.8]],
-	       ['cube', M(   0,  h,   0, w/2,t/2,w/2), [.8,1,.8]],
+          ['cube', M(   0,  0,   0, w/2,t/2,w/2), [.8,1,.8]], /* bottom */
+	       ['cube', M(   0,  h,   0, w/2,t/2,w/2), [.8,1,.8]], 
 	       ['cube', M( w/2,h/2,   0, t/2,h/2,w/2), [1,.8,.8]],
 	       ['cube', M(-w/2,h/2,   0, t/2,h/2,w/2), [1,.8,.8]],
 	       ['cube', M(   0,h/2, w/2, w/2,h/2,t/2), [.8,.8,1]],
@@ -2220,6 +2213,29 @@ let fl = 5;                                                          // CAMERA F
          draw(cylinderYMesh, '40,16,8', [0,height/2        ,0], null, [legRadius ,height/2 ,legRadius ]);
          draw(cylinderYMesh, '40,16,8', [0,thickness       ,0], null, [baseRadius,thickness,baseRadius]);
       }
+
+      /* mesh generation */
+      function square_gen(i, z)
+      {
+         let j = z < 0 ? (i + 2) % 3 : (i + 1) % 3,
+             k = z < 0 ? (i + 1) % 3 : (i + 2) % 3;
+      
+         let scale = 3;
+         let A = []; A[i] = z; A[j] = -scale; A[k] =  scale;
+         let B = []; B[i] = z; B[j] = -scale; B[k] = -scale;
+         let C = []; C[i] = z; C[j] = scale; C[k] = scale;
+         let D = []; D[i] = z; D[j] = scale; D[k] = -scale;
+         let N = []; N[i] = z < 0 ? -1 : 1; N[j] = 0; N[k] = 0;
+      
+         let V = [];
+         V.push(vertexArray(A, N, [1,0,0], [0,0])); /* pos, nor, tan, uv, rgb, wts */
+         V.push(vertexArray(B, N, [1,0,0], [0,1]));
+         V.push(vertexArray(C, N, [1,0,0], [1,0]));
+         V.push(vertexArray(D, N, [1,0,0], [1,1]));
+      
+         return new Float32Array(V.flat());
+      }
+      draw(square_gen(1, 0.5), [0, 0, 0]);
 
       // DRAW REMOTE OBJ
       this.renderSyncObj(remoteObjRoot);
