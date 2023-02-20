@@ -10,7 +10,7 @@ export default () => {
       enableSceneReloading: true,
       scenes: [
          {name: "xi_liu", path: "./4.js"},
-         {name: "3", path: "./3.js"},
+         /* {name: "3", path: "./3.js"},
          {name: "2" , path: "./2.js"},
          {name: "1", path: "./1.js"},
          { name: "DemoExample"       , path: "./demoExample.js"       },
@@ -25,7 +25,7 @@ export default () => {
          { name: "DemoHUD"           , path: "./demoHUD.js"           },
          { name: "DemoHands"         , path: "./demoHands.js"         },
          { name: "DemoShader"        , path: "./demoShader.js"        },
-         { name: "DemoTerrain"       , path: "./demoTerrain.js"       },
+         { name: "DemoTerrain"       , path: "./demoTerrain.js"       }, */
       ]
    };
 }
