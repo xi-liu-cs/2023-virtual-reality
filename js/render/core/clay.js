@@ -2212,29 +2212,6 @@ let fl = 1;                                                          // CAMERA F
          draw(cylinderYMesh, '40,16,8', [0,thickness       ,0], null, [baseRadius,thickness,baseRadius]);
       }
 
-      /* mesh generation */
-      function square_gen(i, z)
-      {
-         let j = z < 0 ? (i + 2) % 3 : (i + 1) % 3,
-             k = z < 0 ? (i + 1) % 3 : (i + 2) % 3;
-      
-         let scale = 3;
-         let A = []; A[i] = z; A[j] = -scale; A[k] =  scale;
-         let B = []; B[i] = z; B[j] = -scale; B[k] = -scale;
-         let C = []; C[i] = z; C[j] = scale; C[k] = scale;
-         let D = []; D[i] = z; D[j] = scale; D[k] = -scale;
-         let N = []; N[i] = z < 0 ? -1 : 1; N[j] = 0; N[k] = 0;
-      
-         let V = [];
-         V.push(vertexArray(A, N, [1,0,0], [0,0])); /* pos, nor, tan, uv, rgb, wts */
-         V.push(vertexArray(B, N, [1,0,0], [0,1]));
-         V.push(vertexArray(C, N, [1,0,0], [1,0]));
-         V.push(vertexArray(D, N, [1,0,0], [1,1]));
-      
-         return new Float32Array(V.flat());
-      }
-      draw(square_gen(1, 0.5), [0, 0, 0]);
-
       // DRAW REMOTE OBJ
       this.renderSyncObj(remoteObjRoot);
 

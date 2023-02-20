@@ -15,7 +15,7 @@ export const init = async model => {
       box.flag('uNoiseTexture');
       model.customShader(`
          uniform int uNoiseTexture;
-         --------------------------
+         ---
          if (uNoiseTexture == 1)
             color *= .5 + noise(3. * vAPos);
       `);
