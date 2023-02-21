@@ -95,6 +95,6 @@ export const init = async model => {
          return [2 * u - 1, 2 * v - 1, .07 * cg.noise(2 * u, 2 * v, .5)];
       });
 
-      obj.hud().scale(.2,.2,.0001);
+      obj.hud().scale(.05,.05,.0001);
    });
 }
