@@ -4,7 +4,7 @@ Software for 2023 VR class
 
 ## display
 
-https://www.youtube.com/watch?v=TTTGVPFjxOE
+https://www.youtube.com/watch?v=zjBw2FOnpSo
 
 ## beam
 
