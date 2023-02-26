@@ -421,14 +421,12 @@ let prevTextureResource  = null;
 let prevTextureBindPoint = -1;
 
 let drawMesh = (mesh, materialId, textureSrc, dull, flags, customShader, opacity) => {
-   if (!this.renderingIsActive) {
+   if (!this.renderingIsActive)
       return;
-   }
 
    let saveProgram = this.clayPgm.program;
-   if (customShader) {
+   if (customShader)
       window.customShader = customShader;
-   }
 
    let m = M.getValue();
    setUniform('Matrix4fv', 'uModel', false, m);
@@ -589,12 +587,14 @@ let drawMesh = (mesh, materialId, textureSrc, dull, flags, customShader, opacity
 
    if (flags)
       for (let flag in flags)
-         setUniform('1i', flag, 1); if (this.views.length == 1) { setUniform('Matrix4fv', 'uProj', false, this.views[0].projectionMatrix);
+         setUniform('1i', flag, 1);
+
+   if (this.views.length == 1) {
+      setUniform('Matrix4fv', 'uProj', false, this.views[0].projectionMatrix);
       setUniform('Matrix4fv', 'uView', false, this.views[0].viewMatrix);
       
-      if (mesh != prevMesh) {
+      if (mesh != prevMesh)
          gl.bufferData(gl.ARRAY_BUFFER, mesh, gl.DYNAMIC_DRAW);
-      }
 
       gl.drawArrays(mesh.isTriangles ? gl.TRIANGLES : gl.TRIANGLE_STRIP, 0, mesh.length / VERTEX_SIZE);
 
@@ -602,9 +602,8 @@ let drawMesh = (mesh, materialId, textureSrc, dull, flags, customShader, opacity
       const drawPrimitiveType = mesh.isTriangles ? gl.TRIANGLES : gl.TRIANGLE_STRIP;
       const vertexCount = mesh.length / VERTEX_SIZE;
       
-      if (mesh != prevMesh) {
+      if (mesh != prevMesh)
          gl.bufferData(gl.ARRAY_BUFFER, mesh, gl.DYNAMIC_DRAW);
-      }
 
       for (let i = 0; i < this.views.length; ++i) {
          let view = this.views[i];
@@ -612,7 +611,6 @@ let drawMesh = (mesh, materialId, textureSrc, dull, flags, customShader, opacity
          gl.viewport(vp.x, vp.y, vp.width, vp.height);
          setUniform('Matrix4fv', 'uProj', false, view.projectionMatrix);
          setUniform('Matrix4fv', 'uView', false, view.viewMatrix);
-   
          gl.drawArrays(drawPrimitiveType, 0, vertexCount);
       }
    }
@@ -1032,15 +1030,25 @@ this.wire = (nu,nv) => {
 }
 
 this.animateWire = (wire, r, f) => {
-   wire.setVertices((u,v) => {
-      let p = f(u),
-          z = cg.subtract(f(u + .01), p),
-          xx = z[0]*z[0], yy = z[1]*z[1], zz = z[2]*z[2],
-          x = cg.normalize(cg.cross(z, [ yy+zz, zz+xx, xx+yy ])),
-          y = cg.normalize(cg.cross(z, x));
-      return cg.add(cg.add(p, cg.scale(x, r * Math.sin(2 * Math.PI * v))),
-                              cg.scale(y, r * Math.cos(2 * Math.PI * v)));
-   });
+   let nu = parseInt(wire._form.substring(5,wire.length));
+
+   let z = cg.subtract(f(.01), f(0)),
+       xx = z[0]*z[0], yy = z[1]*z[1], zz = z[2]*z[2],
+       x = cg.normalize(cg.cross(z, [ yy+zz, zz+xx, xx+yy ])),
+       y = cg.normalize(cg.cross(z, x));
+
+   let X = [], Y = [];
+   for (let i = 0 ; i <= nu ; i++) {
+      X.push(x);
+      Y.push(y);
+      let u = i / nu;
+      z = cg.subtract(f(u + .01), f(u));
+      x = cg.normalize(cg.cross(y, z));
+      y = cg.normalize(cg.cross(z, x));
+   }
+
+   wire.setVertices((u,v) => cg.add(cg.add(f(u), cg.scale(X[nu*u >> 0], r * Math.sin(2 * Math.PI * v))),
+                                                 cg.scale(Y[nu*u >> 0], r * Math.cos(2 * Math.PI * v))));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -1792,12 +1800,12 @@ let onKeyUp = event => {
 let S = [], vm, vmi, computeQuadric, activeSet, implicitSurface,
     rotatex, rotatey, rotatexState, rotateyState, modelMatrix, isTable = true, isRoom = true;
 let frameCount = 0;
+let fl = 5;                                                          // CAMERA FOCAL LENGTH
 {
    let activeCount = -1;
    let blinkTime = 0;
    let blur = 0.2;
    let cursor = [0,0,0];
-   let fl = 5;                                                          // CAMERA FOCAL LENGTH
    let flash = false;
    let isAlt = false;
    let isAnimatedTexture = false;
@@ -3735,8 +3743,7 @@ function Node(_form) {
 
    this.hud = () => {
       this._isHUD = true;
-      //this.setMatrix(this.viewMatrix()).move(0,0,-1).turnY(Math.PI);
-      this.setMatrix(this.viewMatrix()).move(0,0,1);
+      this.setMatrix(this.inverseViewMatrix()).move(0,0,-1).scale(1 / (window.vr ? 2 : fl));
       return this;
    }
    this.audio = src => {return this;}
@@ -3768,7 +3775,7 @@ function Node(_form) {
       }
    }
 
-   this.viewMatrix = n => cg.mInverse(views[n ? 1 : 0]._viewMatrix);
+   this.inverseViewMatrix = n => cg.mInverse(views[n ? 1 : 0]._viewMatrix);
 
    window.controlAction = ch => {
       if (model._controlActions[ch]) {
