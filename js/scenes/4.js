@@ -37,7 +37,7 @@ export const init = async model => {
       float turbulence(vec3 p)
       {
          float t = 0., f = 1.;
-         for (int i = 0 ; i < 10 ; ++i)
+         for(int i = 0; i < 10; ++i)
          {
             t += abs(noise(f * p)) / f;
             f *= 2.;

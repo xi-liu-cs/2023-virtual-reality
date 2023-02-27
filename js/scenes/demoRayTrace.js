@@ -41,7 +41,7 @@ export const init = async model => {
          vec3 shadeSphere(vec3 p, vec4 s, vec4 c) {
             vec3 N = normalize(p - s.xyz);
             vec3 color = .1 * c.rgb;
-            for (int l = 0 ; l < 4 ; l++) {
+            for (int l = 0; l < 4; l++) {
                vec3 lDir = light[l].xyz;
                float lBrightness = light[l].w;
                float t = -1.;
