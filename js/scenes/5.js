@@ -23,6 +23,12 @@ export const init = async model => {
    clay.defineMesh('terrain', clay.createGrid(100, 100));
    let terrain = model.add('terrain').color(0,.5,1).opacity(.7); /* water */
 
+   clay.defineMesh('terrain0', clay.createGrid(100, 100));
+   let terrain0 = model.add('terrain0').color(.2,.5,1).opacity(.5); /* water */
+
+   clay.defineMesh('terrain1', clay.createGrid(100, 100));
+   let terrain1 = model.add('terrain1').color(.3,.5,1).opacity(.5); /* water */
+
    clay.defineMesh('terrain2', clay.createGrid(100, 100));
    let terrain2 = model.add('terrain2').opacity(1); /* island */
 
@@ -32,6 +38,8 @@ export const init = async model => {
    let N = (t,a,b,c,d) => cg.noise(a * t, b * t, c * t + d * model.time);
    let f = t => [ N(t,3,3.3,3.6,.3), N(t,3.3,3.6,3,.25), N(t,3.6,3,3.3,.2) ];
    let wire = model.add(clay.wire(200,8)).move(.5,.3,0).scale(.5);
+   let wire2 = model.add(clay.wire(200,8)).move(0,.3,0).scale(.5);
+   let wire3 = model.add(clay.wire(200,8)).move(0,.3,0).scale(.5);
 
    model.animate(() => {
       let m = views[0]._viewMatrix, c = .5 * Math.cos(model.time), s = .5 * Math.sin(model.time);
@@ -124,7 +132,17 @@ export const init = async model => {
       }
 
       if(uTerrainTexture == 1)
+      {
+         for(int l = 0; l < 4; l++)
+         {
+            vec3 N = normalize(vec3(0., 0., 1.));
+            vec3 lDir = light[l].xyz;
+            float lBrightness = light[l].w;
+            vec3 R = 2. * N * dot(N, lDir) - lDir;
+            color += lBrightness * (.9 * max(0., dot(N, lDir)) + vec3(pow(max(0., R.z), 10.)));
+         }
          color *= .7 + turbulence(5. * vAPos);
+      }
 
       if(uTerrain2Texture == 1)
       {
@@ -187,7 +205,19 @@ export const init = async model => {
       terrain.flag('uTerrainTexture');
       terrain.identity().move(0, 0.5, 0).turnX(-.5 * Math.PI).scale(5);
       terrain.setVertices((u, v) => {
-         return [1000 * (2 * u - 1) * model.time, 1000 * (2 * v - 1) * model.time, .1 * cg.noise(30 * u - .1 * model.time, 30 * v, .1 * model.time)];
+         return [1000 * (2 * u - 1) * model.time, 1000 * (2 * v - 1) * model.time, .1 * cg.noise(30 * u - .3 * c, 30 * v * c, .3 * c)];
+      });
+
+      terrain0.flag('uTerrainTexture');
+      terrain0.identity().move(0, 0.5, 0).turnX(-.5 * Math.PI).scale(1, 1, 10);
+      terrain0.setVertices((u, v) => {
+         return [2 * u - 1, 2 * v - 1, .2 * cg.noise(3 * u - model.time, 3 * v, model.time)];
+      });
+
+      terrain1.flag('uTerrainTexture');
+      terrain1.identity().move(0, 0.5, 0).turnX(-.5 * Math.PI).scale(5);
+      terrain1.setVertices((u, v) => {
+         return [(2 * u - 1) * model.time, (2 * v - 1) * model.time, .07 * cg.noise(2 * u - s, 2 * v * s, .5 * s)];
       });
 
       terrain2.flag('uTerrain2Texture');
@@ -197,7 +227,11 @@ export const init = async model => {
       });
 
       clay.animateWire(wire, .1, f);
+      clay.animateWire(wire2, .1, f);
+      clay.animateWire(wire3, .1, f);
       wire.flag('uRayTrace');
+      wire2.flag('uRayTrace');
+      wire3.flag('uRayTrace');
       obj.hud().scale(.05,.05,.0001);
    });
 }
