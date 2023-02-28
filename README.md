@@ -2,6 +2,10 @@
 
 Software for 2023 VR class
 
+## water
+
+https://www.youtube.com/watch?v=xNdzlNikfp8
+
 ## display
 
 https://www.youtube.com/watch?v=zjBw2FOnpSo
