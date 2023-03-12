@@ -9,8 +9,8 @@ export default () => {
    return {
       enableSceneReloading: true,
       scenes: [
-         { name: "xi_liu", path: "./5.js"},
-         { name: "DemoSimplest"       , path: "./demoSimplest.js"       },
+         { name: "xi_liu", path: "./6.js"},
+         /* { name: "DemoSimplest"       , path: "./demoSimplest.js"       },
          { name: "DemoShapes"         , path: "./demoShapes.js"         },
          { name: "DemoRobot"          , path: "./demoRobot.js"          },
          { name: "DemoControllers"    , path: "./demoControllers.js"    },
@@ -30,7 +30,7 @@ export default () => {
          { name: "DemoParticles"      , path: "./demoParticles.js"      },
          { name: "DemoGLTF"           , path: "./demoGLTF.js"           },
          { name: "DemoSprite"         , path: "./demoSprite.js"         },
-         { name: "DemoIntersect"      , path: "./demoIntersect.js"      },
+         { name: "DemoIntersect"      , path: "./demoIntersect.js"      }, */
       ]
    };
 }

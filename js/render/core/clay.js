@@ -2194,8 +2194,9 @@ let fl = 5;                                                          // CAMERA F
       if (isRoom) {
          if (! formMesh.roomBackground) {
             let inch = 0.0254, foot = 12*inch, h = 10 * foot, w = 30 * foot, t = 2 * inch;
-            h *= 1000;
-            w *= 1000;
+            h *= 10;
+            w *= 10;
+            t *= 10;
             let M = (x,y,z, sx,sy,sz) => cg.mMultiply(cg.mTranslate(x,y,z), cg.mScale(sx,sy,sz));
 	    this.defineMesh('roomBackground', this.combineMeshes([
           ['cube', M(   0,  0,   0, w/2,t/2,w/2), [.8,1,.8]], /* bottom */
