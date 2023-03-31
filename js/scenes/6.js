@@ -2,6 +2,8 @@ import * as cg from "../render/core/cg.js";
 import {g2} from "../util/g2.js";
 import * as global from "../global.js";
 import {Gltf2Node} from "../render/nodes/gltf2.js";
+import { controllerMatrix, buttonState, joyStickState } from "../render/core/controllerInput.js";
+import * as keyboardInput from "../util/input_keyboard.js";
 
 export const init = async model => {
    g2.textHeight(.1);
@@ -314,5 +316,52 @@ export const init = async model => {
       clay.animateWire(wire2, .1, f);
       clay.animateWire(wire3, .1, f);
       obj.hud().scale(.05,.05,.0001); */
+
+      /* let left0 = buttonState.left[0].pressed,
+      left1 = buttonState.left[1].pressed,
+      left2 = buttonState.left[2].pressed,
+      left3 = buttonState.left[3].pressed,
+      left4 = buttonState.left[4].pressed,
+      left5 = buttonState.left[5].pressed,
+      left6 = buttonState.left[6].pressed,
+      right0 = buttonState.right[0].pressed,
+      right1 = buttonState.right[1].pressed,
+      right2 = buttonState.right[2].pressed,
+      right3 = buttonState.right[3].pressed,
+      right4 = buttonState.right[4].pressed,
+      right5 = buttonState.right[5].pressed,
+      right6 = buttonState.right[6].pressed;
+      if(left1) console.log('left1');
+      if(left2) console.log('left2');
+      if(left3) console.log('left3');
+      if(left4) console.log('left4');
+      if(left5) console.log('left5');
+      if(left6) console.log('left6');
+      if(right1) console.log('right1');
+      if(right2) console.log('right2');
+      if(right3) console.log('right3');
+      if(right4) console.log('right4');
+      if(right5) console.log('right5');
+      if(right6) console.log('right6');
+      console.log(buttonState.left);
+      console.log(buttonState.right); */
+      if(buttonState.left[0].pressed)
+      {/* down */
+         gltf.translation[1] -= 1.5;
+         model.move(0,-1.5,0);
+      }
+      if(buttonState.right[0].pressed)
+      {/* up */
+         gltf.translation[1] += 1.5;
+         model.move(0,1.5,0);
+      }
+      if(keyboardInput.keyIsDown(keyboardInput.KEY_W))
+      {
+         model.move(0,1.5,0);
+      }
+      if(keyboardInput.keyIsDown(keyboardInput.KEY_S))
+      {
+         model.move(0,-1.5,0);
+      }
    });
 }

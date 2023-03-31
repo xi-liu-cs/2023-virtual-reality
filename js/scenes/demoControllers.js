@@ -114,7 +114,6 @@ export const init = async model => {
       }
 
       // DISPLAY THE BOX.
-   
       box.setMatrix(MP).scale(.1);
    });
 }

@@ -2199,7 +2199,7 @@ let fl = 5;                                                          // CAMERA F
             t *= 10;
             let M = (x,y,z, sx,sy,sz) => cg.mMultiply(cg.mTranslate(x,y,z), cg.mScale(sx,sy,sz));
 	    this.defineMesh('roomBackground', this.combineMeshes([
-          ['cube', M(   0,  0,   0, w/2,t/2,w/2), [.8,1,.8]], /* bottom */
+          /* ['cube', M(   0,  0,   0, w/2,t/2,w/2), [.8,1,.8]], */ /* bottom */
 	       ['cube', M(   0,  h,   0, w/2,t/2,w/2), [.8,1,.8]], 
 	       ['cube', M( w/2,h/2,   0, t/2,h/2,w/2), [1,.8,.8]],
 	       ['cube', M(-w/2,h/2,   0, t/2,h/2,w/2), [1,.8,.8]],
