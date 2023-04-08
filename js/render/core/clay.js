@@ -741,6 +741,29 @@ let setVertices = (mesh, f) => {
    }
 }
 
+let setVertices2 = (mesh, f, data) => {
+   let nu = mesh.nu, nv = mesh.nv, i = 0;
+   let setVertex = (u, v) => {
+      let P = f(u, v, data);
+      let N = normalAtUV(u,v, P, f);
+      let V = vertexArray(P, N, null, [u,v]);
+      for (let k = 0 ; k < 16 ; k++)
+         mesh[i++] = V[k];
+   }
+   for (let j = nv ; j > 0 ; j--) {
+      let v = j/nv;
+      for (let i = 0 ; i <= nu ; i++) {
+         let u = i/nu;
+         setVertex(u, v);
+         setVertex(u, v-1/nv);
+      }
+      if (j > 1) {
+         setVertex(1, v-1/nv);
+         setVertex(0, v-1/nv);
+      }
+   }
+}
+
 // GLUE TWO MESHES TOGETHER INTO A SINGLE MESH
 
 let glueMeshes = (a, b) => {
@@ -3742,6 +3765,7 @@ function Node(_form) {
    }
 
    this.setVertices = f => setVertices(clay.formMesh(form), f);
+   this.setVertices2 = (f, data) => setVertices2(clay.formMesh(form), f, data);
 
    this.hud = () => {
       this._isHUD = true;
