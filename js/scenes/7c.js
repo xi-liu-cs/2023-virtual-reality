@@ -1,21 +1,26 @@
 import * as cg from "../render/core/cg.js";
 import {g2} from "../util/g2.js";
+import "../render/core/clay.js";
 import * as global from "../global.js";
 import {Gltf2Node} from "../render/nodes/gltf2.js";
 import { controllerMatrix, buttonState, joyStickState } from "../render/core/controllerInput.js";
 import * as keyboardInput from "../util/input_keyboard.js";
-import {Scene} from "../render/core/scene";
-import {Node} from "../render/core/node";
+import {mRotateY} from "../render/core/cg.js";
+
 
 let v_near = 2;// viewing the model up close
-let v_far = .5;// viewing the model from far away
+let v_far = 1;// viewing the model from far away
+let gltf0;
 let m_scales = [0.01,1,10,2];// scaling the glft models to be relatively the same size
 export const init = async model =>
 {
+    /**
+     * Adding gltf models for the zoomed-in view
+     * **/
     model.setTable(false);
     //model.setRoom(false);
     // add islands
-    let gltf0 = new Gltf2Node({url: './media/gltf/box-gltf/box.gltf'});
+    gltf0 = new Gltf2Node({url: './media/gltf/box-gltf/box.gltf'});
     let gltf1 = new Gltf2Node({url: './media/gltf/camp/camp.gltf'});
     let gltf2 = new Gltf2Node({url: './media/gltf/fire_in_the_sky/scene.gltf'});
     let gltf3 = new Gltf2Node({url: './media/gltf/cave/cave.gltf'});
@@ -38,7 +43,9 @@ export const init = async model =>
     gltf0.addNode(gltf3);
     global.gltfRoot.addNode(gltf0);
 
-    // small-scale view
+    /**
+     * Adding gltf models for the zoomed-out (small thumbnails) view
+     * **/
     let gltfs0 = new Gltf2Node({url: './media/gltf/box-gltf/box.gltf'});
     let gltfs1 = new Gltf2Node({url: './media/gltf/camp/camp.gltf'});
     let gltfs2 = new Gltf2Node({url: './media/gltf/fire_in_the_sky/scene.gltf'});
@@ -62,6 +69,10 @@ export const init = async model =>
     // small_islands.add('cube'); // HUD object.
     //small_islands.add(gltfs0); // HUD object.
 
+    let testSphere = model.add('sphere').color(1,0,0);
+    let boxBackgound = model.add('cube');
+
+    /** End of Adding gltf models **/
 
 
     let isAnimate = true, isBlending = true, isRubber = true, t = 0;
@@ -317,6 +328,32 @@ export const init = async model =>
 
 
     model.move(0,1.5,0).scale(.6).animate(() => {
+        /**
+         * Getting View Position & Direction
+         * **/
+        let vm = clay.views[0].viewMatrix;
+        let viewPosition=[];
+        viewPosition.push(vm[12]);
+        viewPosition.push(vm[13]);
+        viewPosition.push(vm[14]);
+
+        let transform = cg.mRotateY(.2);
+        vm = cg.mMultiply(vm, transform);
+        let viewDirection=[];
+        viewDirection.push(vm[2]);
+        viewDirection.push(vm[6]);
+        viewDirection.push(vm[10]);
+
+        let smallIslandPosition = cg.subtract(cg.normalize(viewDirection),viewPosition);
+        testSphere.identity().move(smallIslandPosition[0],smallIslandPosition[1]-1,-smallIslandPosition[2]).scale(0);
+        boxBackgound.identity().move(smallIslandPosition[0],smallIslandPosition[1]-2.2,-smallIslandPosition[2]+1).scale(.6,.01,.6);
+
+        gltfs0.translation[0]=smallIslandPosition[0];
+        gltfs0.translation[1]=smallIslandPosition[1]-1;
+        gltfs0.translation[2]=-smallIslandPosition[2];
+        // testSphere.identity().move(smallIslandPosition).scale(.1);
+
+        /** End of Getting View Position & Direction **/
 
         model.setUniform('4fv','uL', [.5,.5,.5,1., -.5,-.5,-.5,.2, .7,-.7,0,.2, -.7,.7,0,.2]);
         model.setUniform('4fv','uS', [c,s,0,0, s,0,c,0, 0,c,s,0, -c,-s,0,0]);

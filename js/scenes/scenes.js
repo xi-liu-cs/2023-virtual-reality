@@ -11,6 +11,7 @@ export default () => {
       scenes: [
          { name: "xi_liu", path: "./7.js"},
          { name: "yuepingwang-b", path: "./7b.js"},
+         { name: "yuepingwang-c", path: "./7c.js"},
          { name: "DemoHUD"            , path: "./demoHUD.js"            },
          /* { name: "DemoSimplest"       , path: "./demoSimplest.js"       },
          { name: "DemoShapes"         , path: "./demoShapes.js"         },
