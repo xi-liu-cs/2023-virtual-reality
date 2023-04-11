@@ -25,6 +25,7 @@ export const init = async model =>
     // Note on gltf: there's a 100MB file size limit by github, so I'm going to just use the smaller files when pushing to github
     let gltf2 = new Gltf2Node({url: './media/gltf/sponza/Sponza.gltf'});
     let gltf3 = new Gltf2Node({url: './media/gltf/cave/cave.gltf'});
+    //let ladder1 = new Gltf2Node({url: './media/gltf/ladder/scene.gltf'});
     // let gltf2 = new Gltf2Node({url: './media/gltf/fire_in_the_sky/scene.gltf'});
     // let gltf3 = new Gltf2Node({url: './media/gltf/cave/cave.gltf'});
     //let gltf4 = new Gltf2Node({url: './media/gltf/sponza/Sponza.gltf'});
@@ -40,6 +41,9 @@ export const init = async model =>
     gltf1.scale = [1, 1 , 1].map((x)=> x * v_near);
     gltf2.scale = [1, 1 , 1].map((x)=> x * v_near);
     gltf3.scale = [3,3,3].map((x)=> x * v_near);
+    // ladder1.translation = [20, 0, -20].map((x)=> x * v_near);
+    // ladder1.scale = [1, 1 , 1].map((x)=> x * v_near);
+
     // Scaling for the larger gltf files (not pushed to github)
     // gltf2.scale = [10, 10, 10].map((x)=> x * v_near);
     // gltf3.scale = [2, 2, 2].map((x)=> x * v_near);
@@ -47,6 +51,7 @@ export const init = async model =>
     gltf0.addNode(gltf1);
     gltf0.addNode(gltf2);
     gltf0.addNode(gltf3);
+    //gltf0.addNode(ladder1);
     global.gltfRoot.addNode(gltf0);
 
     /**
@@ -371,8 +376,8 @@ export const init = async model =>
             gltf0.translation =cg.add(cg.scale(gltf2.translation, -.1),[-4,-.8,1.8]);
         /** End of press controller trigger to switch which island to stand on **/
 
-        let transform = cg.mRotateY(.2);
-        vm = cg.mMultiply(vm, transform);
+        // let transform = cg.mRotateY(.2);
+        // vm = cg.mMultiply(vm, transform);
         let viewDirection=[];
         viewDirection.push(vm[2]);
         viewDirection.push(vm[6]);
