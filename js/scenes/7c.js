@@ -5,6 +5,7 @@ import * as global from "../global.js";
 import {Gltf2Node} from "../render/nodes/gltf2.js";
 import { controllerMatrix, buttonState, joyStickState } from "../render/core/controllerInput.js";
 import * as keyboardInput from "../util/input_keyboard.js";
+import { quat } from "../render/math/gl-matrix.js";
 
 
 let v_near = 8;// viewing the model up close
@@ -73,6 +74,21 @@ export const init = async model =>
     gltfs0.addNode(gltfs2);
     gltfs0.addNode(gltfs3);
     global.gltfRoot.addNode(gltfs0);
+
+    let islandsRot = quat.create();
+
+    let joyStickX = 0;
+    let joyStickY = 0;
+
+    let timeLastClick = 0;
+
+    let resetPos = () => {
+        joyStickX = 0;
+        joyStickY = 0;
+        quat.fromEuler(islandsRot, joyStickX, joyStickY, 0);
+        // obj.rotation = quat.rotateY(islandRot, islandRot, -Math.PI/2);
+        gltfs0.rotation = islandsRot; 
+    }
 
     //small_islands.add(gltfs0); // HUD object.
 
@@ -375,6 +391,24 @@ export const init = async model =>
         gltfs0.translation[1]=-thumbnailPosition[1]+1;
         gltfs0.translation[2]=-thumbnailPosition[2];
         // testSphere.identity().move(thumbnailPosition).scale(.1);
+
+        joyStickX += joyStickState.right.y;
+        joyStickY += joyStickState.right.x;
+
+        quat.fromEuler(islandsRot, joyStickX*5, joyStickY*5, 0);
+        gltfs0.rotation = islandsRot;
+
+        for (let i = 0; i < 7; i++) {
+            console.log(`${i} btn: ${buttonState.right[i].pressed}`);
+        }
+        
+        let rightA = buttonState.right[4].pressed;
+        if (rightA) {
+            let timeDiff = model.time - timeLastClick;
+            if (timeDiff > .25) {
+                resetPos();
+            }
+        }
 
         /** End of setting gltf positions **/
 
