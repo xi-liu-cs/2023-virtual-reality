@@ -5,7 +5,6 @@ import * as global from "../global.js";
 import {Gltf2Node} from "../render/nodes/gltf2.js";
 import { controllerMatrix, buttonState, joyStickState } from "../render/core/controllerInput.js";
 import * as keyboardInput from "../util/input_keyboard.js";
-import {mRotateY} from "../render/core/cg.js";
 
 
 let v_near = 8;// viewing the model up close
