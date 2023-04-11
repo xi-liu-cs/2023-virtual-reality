@@ -76,17 +76,14 @@ export const init = async model =>
     global.gltfRoot.addNode(gltfs0);
 
     let islandsRot = quat.create();
-
     let joyStickX = 0;
     let joyStickY = 0;
-
     let timeLastClick = 0;
 
     let resetPos = () => {
         joyStickX = 0;
         joyStickY = 0;
         quat.fromEuler(islandsRot, joyStickX, joyStickY, 0);
-        // obj.rotation = quat.rotateY(islandRot, islandRot, -Math.PI/2);
         gltfs0.rotation = islandsRot; 
     }
 
@@ -392,16 +389,14 @@ export const init = async model =>
         gltfs0.translation[2]=-thumbnailPosition[2];
         // testSphere.identity().move(thumbnailPosition).scale(.1);
 
+        // islands rotation
         joyStickX += joyStickState.right.y;
         joyStickY += joyStickState.right.x;
 
         quat.fromEuler(islandsRot, joyStickX*5, joyStickY*5, 0);
         gltfs0.rotation = islandsRot;
 
-        for (let i = 0; i < 7; i++) {
-            console.log(`${i} btn: ${buttonState.right[i].pressed}`);
-        }
-        
+        // press A to reset
         let rightA = buttonState.right[4].pressed;
         if (rightA) {
             let timeDiff = model.time - timeLastClick;
