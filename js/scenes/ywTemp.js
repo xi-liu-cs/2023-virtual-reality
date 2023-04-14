@@ -1,71 +1,97 @@
 import * as cg from "../render/core/cg.js";
 import {g2} from "../util/g2.js";
+import "../render/core/clay.js";
 import * as global from "../global.js";
 import {Gltf2Node} from "../render/nodes/gltf2.js";
 import { controllerMatrix, buttonState, joyStickState } from "../render/core/controllerInput.js";
 import * as keyboardInput from "../util/input_keyboard.js";
+import {mRotateY} from "../render/core/cg.js";
 
-let v_near = 2;// viewing the model up close
-let v_far = .5;// viewing the model from far away
+
+let v_near = 8;// viewing the model up close
+let v_far = 1;// viewing the model from far away
+let gltf0;
 let m_scales = [0.01,1,10,2];// scaling the glft models to be relatively the same size
 export const init = async model =>
 {
-    model.setTable(false);
+    /**
+     * Adding gltf models for the zoomed-in view
+     * **/
+    //model.setTable(false);
     //model.setRoom(false);
     // add islands
-    let gltf0 = new Gltf2Node({url: './media/gltf/box-gltf/box.gltf'});
+    gltf0 = new Gltf2Node({url: './media/gltf/box-gltf/box.gltf'});
     let gltf1 = new Gltf2Node({url: './media/gltf/camp/camp.gltf'});
-    //let gltf2 = new Gltf2Node({url: './media/gltf/fire_in_the_sky/scene.gltf'});
-    let gltf3 = new Gltf2Node({url: './media/gltf/cave/cave.gltf'});
+    // Note on gltf: there's a 100MB file size limit by github, so I'm going to just use the smaller files when pushing to github
     let gltf2 = new Gltf2Node({url: './media/gltf/sponza/Sponza.gltf'});
+    let gltf3 = new Gltf2Node({url: './media/gltf/cave/cave.gltf'});
+    //let ladder1 = new Gltf2Node({url: './media/gltf/ladder/scene.gltf'});
+    // let gltf2 = new Gltf2Node({url: './media/gltf/fire_in_the_sky/scene.gltf'});
+    // let gltf3 = new Gltf2Node({url: './media/gltf/cave/cave.gltf'});
+    //let gltf4 = new Gltf2Node({url: './media/gltf/sponza/Sponza.gltf'});
     //let gltf5 = new Gltf2Node({url: './media/gltf/dae_diorama_-_eco_house/scene.gltf'});
     //let gltf6 = new Gltf2Node({url: './media/gltf/diorama-3/scene.gltf'});
     //let gltf = new Gltf2Node({url: './media/gltf/0/mountain.glb'});
 
-    gltf0.translation = [0,2,0];
+    gltf0.translation = [0,0,0];
+    gltf1.translation = [25, 0, -20].map((x)=> x * v_near);
+    gltf2.translation = [0, 10, 10].map((x)=> x * v_near);
+    gltf3.translation = [-20, -5, 10].map((x)=> x * v_near);
     gltf0.scale = [0.01,0.01,0.01].map((x)=> x * v_near);
-    gltf1.translation = [20, 0, -20].map((x)=> x * v_near);
     gltf1.scale = [1, 1 , 1].map((x)=> x * v_near);
-    gltf2.translation = [0, 20, 10].map((x)=> x * v_near);
-    gltf2.scale = [10, 10, 10].map((x)=> x * v_near);
-    gltf3.translation = [-20, -10, 10].map((x)=> x * v_near);
-    gltf3.scale = [2, 2, 2].map((x)=> x * v_near);
+    gltf2.scale = [1, 1 , 1].map((x)=> x * v_near);
+    gltf3.scale = [3,3,3].map((x)=> x * v_near);
+    // ladder1.translation = [20, 0, -20].map((x)=> x * v_near);
+    // ladder1.scale = [1, 1 , 1].map((x)=> x * v_near);
+
+    // Scaling for the larger gltf files (not pushed to github)
+    // gltf2.scale = [10, 10, 10].map((x)=> x * v_near);
+    // gltf3.scale = [2, 2, 2].map((x)=> x * v_near);
 
     gltf0.addNode(gltf1);
     gltf0.addNode(gltf2);
     gltf0.addNode(gltf3);
+    //gltf0.addNode(ladder1);
     global.gltfRoot.addNode(gltf0);
 
-    // small-scale view
+    /**
+     * Adding gltf models for the zoomed-out (small thumbnails) view
+     * **/
     let gltfs0 = new Gltf2Node({url: './media/gltf/box-gltf/box.gltf'});
     let gltfs1 = new Gltf2Node({url: './media/gltf/camp/camp.gltf'});
-    //let gltfs2 = new Gltf2Node({url: './media/gltf/fire_in_the_sky/scene.gltf'});
-    let gltfs2 = new Gltf2Node({url: './media/gltf/cave/cave.gltf'});
+    let gltfs2 = new Gltf2Node({url: './media/gltf/sponza/Sponza.gltf'});
     let gltfs3 = new Gltf2Node({url: './media/gltf/cave/cave.gltf'});
+    // let gltfs2 = new Gltf2Node({url: './media/gltf/fire_in_the_sky/scene.gltf'});
+    // let gltfs3 = new Gltf2Node({url: './media/gltf/cave/cave.gltf'});
 
-    gltfs0.translation = [1, 2, 1];
+    gltfs0.translation = [0, 3, 1];
+    gltfs1.translation = [25, 0, -20].map((x)=> x * v_far);
+    gltfs2.translation = [0, 10, 10].map((x)=> x * v_far);
+    gltfs3.translation = [-20, -5, 10].map((x)=> x * v_far);
     gltfs0.scale = [0.01, 0.01, 0.01].map((x)=> x * v_far);
-    gltfs1.translation = [20, 0, -20].map((x)=> x * v_far);
     gltfs1.scale = [1, 1, 1].map((x)=> x * v_far);
-    gltfs2.translation = [0, 20, 10].map((x)=> x * v_far);
-    gltfs2.scale = [10, 10, 10].map((x)=> x * v_far);
-    gltfs3.translation = [-20, -10, 10].map((x)=> x * v_far);
-    gltfs3.scale = [2, 2, 2].map((x)=> x * v_far);
+    gltfs2.scale = [1, 1, 1].map((x)=> x * v_far);
+    gltfs3.scale = [3,3,3].map((x)=> x * v_far);
+    // gltfs2.scale = [10, 10, 10].map((x)=> x * v_far);
+    // gltfs3.scale = [2, 2, 2].map((x)=> x * v_far);
 
     gltfs0.addNode(gltfs1);
     gltfs0.addNode(gltfs2);
     gltfs0.addNode(gltfs3);
     global.gltfRoot.addNode(gltfs0);
 
-    // let small_islands = model.add();
-    // small_islands.add('cube'); // HUD object.
     //small_islands.add(gltfs0); // HUD object.
 
+    //let sphereBackground = model.add('sphere').color('white').opacity(.5);
+    //let boxBackground0 = model.add('cube').color(.2,.2,.2);
+    //let boxBackground1 = model.add('cube');
+
+    /** End of Adding gltf models **/
 
 
     let isAnimate = true, isBlending = true, isRubber = true, t = 0;
 
-    model.move(0, -0.5, 0);
+    // model.move(0, -0.5, 0);
 
     let dim = 20,
         one_over_dim = 1 / dim,
@@ -316,6 +342,48 @@ export const init = async model =>
 
 
     model.move(0,1.5,0).scale(.6).animate(() => {
+        /**
+         * Setting gltf positions
+         * **/
+
+        let vm = clay.views[0].viewMatrix;
+        let viewPosition=[];
+        viewPosition.push(vm[12]);
+        viewPosition.push(vm[13]);
+        viewPosition.push(vm[14]);
+
+        /** Press controller trigger to switch which island to stand on **/
+        let rightTrigger = buttonState.right[0].pressed;
+        let leftTrigger = buttonState.left[0].pressed;
+
+        if (leftTrigger && rightTrigger)
+            gltf0.translation =cg.add(cg.scale(gltf3.translation, -.1),[-2,-2,-1]);
+        else if (rightTrigger)
+            gltf0.translation =cg.add(cg.scale(gltf1.translation, -.1),[4,-1,2]);
+        else if (leftTrigger)
+            gltf0.translation =cg.add(cg.scale(gltf2.translation, -.1),[-4,-.8,1.8]);
+        /** End of press controller trigger to switch which island to stand on **/
+
+            // let transform = cg.mRotateY(.2);
+            // vm = cg.mMultiply(vm, transform);
+        let viewDirection=[];
+        viewDirection.push(vm[2]);
+        viewDirection.push(vm[6]);
+        viewDirection.push(vm[10]);
+        let thumbnailPosition = cg.subtract(cg.normalize(viewDirection),[0,0,0]);
+        //let thumbnailPosition = cg.add(cg.normalize(viewDirection),viewPosition);
+        //sphereBackground.identity().move(thumbnailPosition[0],thumbnailPosition[1]-2,-thumbnailPosition[2]-2).scale(.8);
+        //boxBackground0.identity().move(thumbnailPosition[0],thumbnailPosition[1]-2.5,-thumbnailPosition[2]-2).scale(.4,.01,.4);
+        //boxBackground1.identity().move(thumbnailPosition[0],thumbnailPosition[1]-1.8,-thumbnailPosition[2]-3.0).scale(.4,.4,.01);
+
+        //gltfs0.translation=thumbnailPosition;
+        gltfs0.translation[0]=-thumbnailPosition[0];
+        gltfs0.translation[1]=-thumbnailPosition[1]+1;
+        gltfs0.translation[2]=-thumbnailPosition[2];
+        // testSphere.identity().move(thumbnailPosition).scale(.1);
+
+        /** End of setting gltf positions **/
+
 
         model.setUniform('4fv','uL', [.5,.5,.5,1., -.5,-.5,-.5,.2, .7,-.7,0,.2, -.7,.7,0,.2]);
         model.setUniform('4fv','uS', [c,s,0,0, s,0,c,0, 0,c,s,0, -c,-s,0,0]);

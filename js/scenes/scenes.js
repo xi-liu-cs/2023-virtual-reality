@@ -12,8 +12,6 @@ export default () => {
          { name: "xi_liu", path: "./7.js"},
          { name: "View Transform with Trigger", path: "./ywC.js"},
          { name: "View Transform with HUD"    , path: "./ywD.js"},
-         { name: "A"    , path: "./ywA.js"},
-         { name: "B"    , path: "./ywB.js"},
          /* { name: "DemoSimplest"       , path: "./demoSimplest.js"       },
          { name: "DemoShapes"         , path: "./demoShapes.js"         },
          { name: "DemoRobot"          , path: "./demoRobot.js"          },

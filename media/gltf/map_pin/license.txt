@@ -1,0 +1,11 @@
+Model Information:
+* title:	Map pin
+* source:	https://sketchfab.com/3d-models/map-pin-2d59d85ab74d4c668beb7fd506056e31
+* author:	Ngo.Phuoc.Truong (https://sketchfab.com/Ngo.Phuoc.Truong)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Map pin" (https://sketchfab.com/3d-models/map-pin-2d59d85ab74d4c668beb7fd506056e31) by Ngo.Phuoc.Truong (https://sketchfab.com/Ngo.Phuoc.Truong) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

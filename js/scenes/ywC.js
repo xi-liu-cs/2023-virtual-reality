@@ -21,8 +21,8 @@ export const init = async model =>
     /**
      * Adding gltf models for the zoomed-in view
      * **/
-    //model.setTable(false);
-    //model.setRoom(false);
+    model.setTable(false);
+    model.setRoom(false);
     // add islands
     gltf0 = new Gltf2Node({url: './media/gltf/box-gltf/box.gltf'});
     let gltf1 = new Gltf2Node({url: './media/gltf/camp/camp.gltf'});
