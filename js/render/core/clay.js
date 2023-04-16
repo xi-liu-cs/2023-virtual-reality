@@ -1376,6 +1376,7 @@ function Blobs() {
                        : form == 'tubeX'   ? max(xx, yy + zz, 0)
                        : form == 'tubeY'   ? max(yy, zz + xx, 0)
                        : form == 'tubeZ'   ? max(zz, xx + yy, 0)
+                       : form == 'particles' ? xx + yy + zz
                        :                     max(xx, yy, zz) );
       return { p: scale(p, 1/r), n: p };
    }
