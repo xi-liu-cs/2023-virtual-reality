@@ -9,7 +9,8 @@ export default () => {
    return {
       enableSceneReloading: true,
       scenes: [
-         { name: "xi_liu", path: "./7.js"},
+	      { name: "xi_liu", path: "./7.js"},
+	      { name: "throwable", path: "./throwable.js"},
          /* { name: "DemoSimplest"       , path: "./demoSimplest.js"       },
          { name: "DemoShapes"         , path: "./demoShapes.js"         },
          { name: "DemoRobot"          , path: "./demoRobot.js"          },
