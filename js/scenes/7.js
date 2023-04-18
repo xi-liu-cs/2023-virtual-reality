@@ -385,7 +385,7 @@ export const init = async model =>
         return [data[i].p[0], data[i].p[1], data[i].p[2]];
     }); */
 
-          /* clay.animateWire(wire, .1, f);
+      /* clay.animateWire(wire, .1, f);
       clay.animateWire(wire2, .1, f);
       clay.animateWire(wire3, .1, f);
       obj.hud().scale(.05,.05,.0001); */

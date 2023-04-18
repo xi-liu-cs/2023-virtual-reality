@@ -26,8 +26,8 @@ let A = [0, 1, .5];
 let MA = cg.mIdentity();
 
 export const init = async model => {
-	model.setRoom(false);
 	model.setTable(false);
+	model.setRoom(false);
 
     // CREATE THE BOX.
     let box = model.add('cube');
@@ -190,7 +190,7 @@ export const init = async model => {
 
         //display box
         box.identity().move(A).scale(.2);
-		large_box.identity().move(A).move(10,10,10);
+		large_box.identity().move(A).move(0,0,-20).scale(1);
         physics_on = true;
 
     });
