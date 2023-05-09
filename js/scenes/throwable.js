@@ -87,8 +87,6 @@ export const init = async model => {
 
         let physics_on = true;
 
-        // FETCH THE MATRIXES FOR THE LEFT AND RIGHT CONTROLLER.
-
         let ml = controllerMatrix.left;
         let mr = controllerMatrix.right;
 
@@ -106,18 +104,11 @@ export const init = async model => {
 
         if (isLeftInBox) {
 
-            // COLOR THE BOX PINK.
-
             box.color(1, .5, .5);
-
-            // IF THE LEFT TRIGGER IS SQUEEZED
 
             let leftTrigger = buttonState.left[0].pressed;
             if (leftTrigger) {
                 physics_on = false;
-
-                // COLOR THE BOX RED AND MOVE THE BOX.
-
                 box.color(1, 0, 0);
                 A = lcb.projectOntoBeam(A);
             }
@@ -128,18 +119,11 @@ export const init = async model => {
 
         if (isRightInBox) {
 
-            // COLOR THE BOX LIGHT BLUE.
-
             box.color(.5, .5, 1);
-
-            // IF THE RIGHT TRIGGGER IS SQUEEZED
 
             let rightTrigger = buttonState.right[0].pressed;
             if (rightTrigger) {
                 physics_on = false;
-
-                // COLOR THE BOX BLUE AND MOVE AND ROTATE THE BOX.
-
                 box.color(0, 0, 1);
                 let MB = mr.slice();
                 if (!rightTriggerPrev) // ON RIGHT DOWN EVENT:

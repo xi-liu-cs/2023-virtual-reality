@@ -12,6 +12,7 @@ export default () => {
 	      { name: "xi_liu", path: "./7.js"},
 	      { name: "throwable", path: "./throwable.js"},
          { name: "Primitives-onlyScene", path: "./primitiveIslands.js"},
+         { name: "moveableIslands", path: "./moveableIslands.js"},
          /* { name: "DemoSimplest"       , path: "./demoSimplest.js"       },
          { name: "DemoShapes"         , path: "./demoShapes.js"         },
          { name: "DemoRobot"          , path: "./demoRobot.js"          },
