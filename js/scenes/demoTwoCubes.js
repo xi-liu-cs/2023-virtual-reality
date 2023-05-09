@@ -1,12 +1,10 @@
-import * as cg from "../render/core/cg.js";
-
-/***********************************************************************************
-
+/*
    This demo shows how multiple primitives can be combined into a single mesh.
    Doing this for a scene with many primitives can reduce the number of draw calls
    and therefore allow a scene to be rendered at a high frame rate.
+*/
 
-***********************************************************************************/
+import * as cg from "../render/core/cg.js";
 
 export const init = async model => {
    clay.defineMesh('twoCubes', clay.combineMeshes([
