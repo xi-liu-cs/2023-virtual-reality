@@ -78,21 +78,21 @@ export const init = async model => {
          return [(2 * u - 1) * model.time, (2 * v - 1) * model.time, .1 * cg.noise(30 * u - .3 * c, 30 * v * c, .3 * c)];
         }); */
 
-        clay.defineMesh('terrain', clay.createGrid(100, 100));
-        let terrain = model.add('terrain').color(.1,.3,1).opacity(.7); /* water */
+        /* clay.defineMesh('terrain', clay.createGrid(100, 100));
+        let terrain = model.add('terrain').color(.1,.3,1).opacity(.7); 
         terrain.flag('uTerrainTexture');
         terrain.identity().move(0, 0.5, 0).turnX(-.5 * Math.PI).scale(2);
         terrain.setVertices((u, v) => {
            return [(2 * u - 1) * model.time, (2 * v - 1) * model.time, .1 * cg.noise(30 * u - .3 * c, 30 * v * c, .3 * c)];
-        });
+        }); */
 
         let canvas = document.getElementById('anidrawCanvas');
         model.setUniform('2fv', 'resolution', [canvas.width, canvas.height]);
         model.setUniform('2fv', 'mouse', [mouseX, mouseY]);
-        model.setUniform('1i', 'iChannel0', 0);
-        model.setUniform('1i', 'iChannel1', 1);
-        model.setUniform('1i', 'iChannel2', 2);
-        model.setUniform('1i', 'iChannel3', 3);
+        model.setUniform('1i', 'iChannel0', 2); /* uSampler0, uSampler1 are using 0, 1 */
+        model.setUniform('1i', 'iChannel1', 3);
+        model.setUniform('1i', 'iChannel2', 4);
+        model.setUniform('1i', 'iChannel3', 5);
         model.setUniform('1i', 'iFrame', 10000);
 
         let gl = clay.gl, image, texture = gl.createTexture();
@@ -102,7 +102,7 @@ export const init = async model => {
             let src = '../../media/textures/image' + src_array[i] + '.png';
             let loadTexture = () => {
                 try {
-                gl.activeTexture (gl.TEXTURE0);
+                gl.activeTexture (gl.TEXTURE0 + 2 + i);
                 gl.bindTexture   (gl.TEXTURE_2D, texture);
                 gl.pixelStorei   (gl.UNPACK_FLIP_Y_WEBGL, true);
                 gl.texImage2D    (gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
@@ -616,7 +616,7 @@ if (uRayTrace == 1)
 		col = col*(1.0-hh)*(1.0-hh) + 1.25*vec3(0.0,0.12,0.2)*hh;
 	}
 
-    // foam	
+    // foam
 	vec2 uv = (oro + rd*pt).xz;
 	float sur = texture( iChannel3, 0.06*uv ).x;
 	sur = smoothstep( 0.5, 1.0, sur )*0.5 + 0.5*sur*sur*smoothstep(0.2,1.0,texture( iChannel2, 1.0*uv ).x);
