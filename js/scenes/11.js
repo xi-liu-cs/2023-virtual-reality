@@ -95,33 +95,29 @@ export const init = async model => {
         model.setUniform('1i', 'iChannel3', 5);
         model.setUniform('1i', 'iFrame', 10000);
 
-        let gl = clay.gl, image, texture = gl.createTexture();
-        let src_array = ['0', '1', '2'];
+        let gl = clay.gl,
+        src_array = ['0', '1', '2', '3'],
+        image_array = new Array(src_array.length),
+        texture_array = new Array(src_array.length);
         for(let i = 0; i < src_array.length; ++i)
         {
-            let src = '../../media/textures/image' + src_array[i] + '.png';
-            let loadTexture = () => {
+            image_array[i] = new Image();
+            texture_array[i] = gl.createTexture();
+            image_array[i].src = '../../media/textures/image' + src_array[i] + '.png';
+            image_array[i].onload = () => {
                 try {
-                gl.activeTexture(gl.TEXTURE0 + 2 + i);
-                gl.bindTexture(gl.TEXTURE_2D, texture);
-                gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-                gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
-                gl.generateMipmap(gl.TEXTURE_2D);
+                    /* console.log("i = ", i, "image = ", image_array[i], "texture = ", texture_array[i]); */
+                    gl.activeTexture(gl.TEXTURE0 + 2 + i);
+                    gl.bindTexture(gl.TEXTURE_2D, texture_array[i]);
+                    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+                    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image_array[i]);
+                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+                    gl.generateMipmap(gl.TEXTURE_2D);
                 }
                 catch(e) { console.log(e); }
-            }
-            if(typeof src == 'string')
-            {
-                image = new Image();
-                image.onload = loadTexture;
-                image.src = src;
-            }
-            else
-            {
-                image = src;
-                loadTexture();
             }
         }
 
