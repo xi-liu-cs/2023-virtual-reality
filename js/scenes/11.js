@@ -297,7 +297,6 @@ vec3 sdFish( vec3 p )
 	
     vec3 a = vec3(0.0,0.0,0.0);
 	
-    
     a.x -= 0.25*sin(8.0*0.2*fishTime);
 	vec3 oa = a;
 
@@ -310,18 +309,21 @@ vec3 sdFish( vec3 p )
 	vec3 p1 = a; vec3 d1=vec3(0.0);
 	vec3 p2 = a; vec3 d2=vec3(0.0);
 	vec3 mp = a;
-	for( int i=0; i<NUMI; i++ )
+	for(int i = 0; i < clamp(1 + NUMI + int(float(NUMI) * sin(fishTime)), 2, NUMI); ++i) /* for(int i = 0; i < NUMI; ++i) */
 	{	
 		float ih = float(i)/NUMF;
 		
-		float an = or + 1.0*(0.2+0.8*ih)*sin(3.0*ih - 2.0*fishTime);
-		float ll = 0.26;
-		if( i==(NUMI-1) ) ll=0.4;
+		float an = or + 1.0*(0.2+0.8*ih)*sin(3.0*ih - 2.0*fishTime); /* fish body rotation */
+		float ll = 0.26; /* fish length */
+        if( i==(NUMI-1) ) ll=0.4;
 		vec3 b = a + ll*vec3(sin(an), 0.0, cos(an))*(16.0/NUMF);
-		
 		vec2 dis = sd2Segment( a, b, p );
 
-		if( dis.x<res.x ) {res=vec3(dis.x,ih+dis.y/NUMF,0.0); mp=a+(b-a)*dis.y; }
+		if( dis.x<res.x )
+        {
+            res = vec3(dis.x, ih + dis.y / NUMF, 0.0);
+            mp = a + (b - a) * dis.y;
+        }
 		
 		if( i==1 ) { p1=a; d1 = b-a; }
 		
