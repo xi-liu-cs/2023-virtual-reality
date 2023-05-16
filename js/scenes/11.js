@@ -309,12 +309,12 @@ vec3 sdFish( vec3 p )
 	vec3 p1 = a; vec3 d1=vec3(0.0);
 	vec3 p2 = a; vec3 d2=vec3(0.0);
 	vec3 mp = a;
-	for(int i = 0; i < clamp(1 + NUMI + int(float(NUMI) * sin(fishTime)), 2, NUMI); ++i) /* for(int i = 0; i < NUMI; ++i) */
+	for(int i = 0; i < clamp(1 + NUMI + int(float(NUMI) * sin(fishTime)), 2, NUMI); ++i) // for(int i = 0; i < NUMI; ++i)
 	{	
 		float ih = float(i)/NUMF;
 		
-		float an = or + 1.0*(0.2+0.8*ih)*sin(3.0*ih - 2.0*fishTime); /* fish body rotation */
-		float ll = 0.26; /* fish length */
+		float an = or + 1.0*(0.2+0.8*ih)*sin(3.0*ih - 2.0*fishTime); // fish body rotation
+		float ll = 0.26; // fish length
         if( i==(NUMI-1) ) ll=0.4;
 		vec3 b = a + ll*vec3(sin(an), 0.0, cos(an))*(16.0/NUMF);
 		vec2 dis = sd2Segment( a, b, p );
@@ -329,6 +329,26 @@ vec3 sdFish( vec3 p )
 		
 		a = b;
 	}
+    /* for(int i = 0; i < clamp(1 + NUMI + int(float(NUMI) * sin(fishTime)), 2, NUMI); ++i) // for(int i = 0; i < NUMI; ++i)
+	{	
+		float ih = float(i)/NUMF;
+		
+		float an = or + sin(ih); // fish body rotation
+		float ll = 0.26; // fish length
+        if( i==(NUMI-1) ) ll=0.4;
+		vec3 b = a + vec3(an, 0.0, an);
+		vec2 dis = sd2Segment( a, b, p );
+
+		if( dis.x<res.x )
+        {
+            res = vec3(dis.x, dis.y, 0.0);
+            mp = a + (b - a) * dis.y;
+        }
+		
+		if( i==1 ) { p1=a; d1 = b-a; }
+		
+		a = b;
+	} */
 	float h = res.y;
 	float ra = 0.04 + h*(1.0-h)*(1.0-h)*2.7;
 
@@ -512,7 +532,7 @@ if (uRayTrace == 1)
 			mate.w = 8.0;
 			mate.xyz = 1.0*vec3(0.24,0.17,0.22);
 
-			vec3 te = 0.8+2.2*texture( iChannel0, vec2(2.0*tmat.y,pos.y) ).xyz;
+			vec3 te = 0.8+2.2*texture( iChannel0, vec2(2.0*tmat.y,pos.y) ).xyz; // vec3 te = vec3(0.);
 			mate.xyz *= te;
 			
 			// belly/backfin
